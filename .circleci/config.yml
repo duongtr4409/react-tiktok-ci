@@ -60,8 +60,9 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - $SSH_KEY_FINGERPRINT
-      - run: ssh -oStrictHostKeyChecking=no -p $DEPLOYED_PORT $DEPLOYED_USER@$DEPLOYED_SERVER '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
+            - "SHA256:RSCLnfJu/cTko64EtUBFtvb53hKuWh0PIordaH8hOgE"
+      # - run: ssh -oStrictHostKeyChecking=no -p $DEPLOYED_PORT $DEPLOYED_USER@$DEPLOYED_SERVER '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
+      - run: ssh -oStrictHostKeyChecking=no -p 18058 duowngtora@0.tcp.ap.ngrok.io '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
 workflows:
   duowngtora-build-and-test:
     jobs:
