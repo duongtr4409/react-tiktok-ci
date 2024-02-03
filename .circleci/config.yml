@@ -32,16 +32,14 @@ jobs:
   build-and-push:
     executor: docker/docker
     environment:
-      DOCKER_USERNAME: DOCKER_USER
-      DOCKER_PASSWORD: DOCKER_PASS
       DOCKER_IMAGE: duowngtora/circleci-react-tiktok
       DOCKRE_TAG: latest
     steps:
       - setup_remote_docker
       - checkout
       - docker/check:
-          docker-username: $DOCKER_USERNAME
-          docker-password: $DOCKER_PASS
+          docker-username: DOCKER_USER
+          docker-password: DOCKER_PASS
       - docker/build:
           image: $DOCKER_IMAGE
           tag: $DOCKER_TAG
