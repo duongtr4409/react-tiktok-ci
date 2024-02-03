@@ -3,6 +3,6 @@ WORKDIR /app
 COPY . /app
 RUN npm install && npm run build
 
-FROM nginx:latest
+FROM duowngtora/kubernetes:nginx
 COPY ./certs /certs
 COPY --from=build /app/build /usr/share/nginx/html
