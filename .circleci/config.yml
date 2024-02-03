@@ -3,6 +3,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5
+  docker: circleci/docker@2.5.0
 jobs:
   test-node:
     # Install node dependencies and run tests
@@ -28,7 +29,37 @@ jobs:
       - run:
           name: Run tests
           command: npm test --passWithNoTests
+  build-and-push:
+    executor: docker/docker
+    environment:
+      DOCKER_USERNAME: DOCKER_USER
+      DOCKER_PASSWORD: DOCKER_PASS
+      DOCKER_IMAGE: duowngtora/circleci-react-tiktok
+      DOCKRE_TAG: latest
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check:
+          docker-username: $DOCKER_USERNAME
+          docker-password: $DOCKER_PASS
+      - docker/build:
+          image: $DOCKER_IMAGE
+          tag: $DOCKER_TAG
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: $DOCKER_IMAGE
+          tag: $DOCKER_TAG
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
 workflows:
-  build-and-test:
+  duowngtora-build-and-test:
     jobs:
       - test-node
+      - build-and-push:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - test-node
