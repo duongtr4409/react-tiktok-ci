@@ -62,7 +62,7 @@ jobs:
           fingerprints:
             - "SHA256:jnEHVLs0KT9V+vDvRExZFBtflsOemNVKqgzphmup2PE"
       # - run: ssh -oStrictHostKeyChecking=no -p $DEPLOYED_PORT $DEPLOYED_USER@$DEPLOYED_SERVER '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
-      - run: ssh -oStrictHostKeyChecking=no -p 18058 duowngtora@0.tcp.ap.ngrok.io '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
+      - run: ssh -oStrictHostKeyChecking=no -p 18594 duowngtora@0.tcp.ap.ngrok.io '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
 workflows:
   duowngtora-build-and-test:
     jobs:
