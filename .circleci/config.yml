@@ -3,7 +3,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5
-  docker: circleci/docker@1.4.0
+  docker: circleci/docker@2.5.0
 jobs:
   test-node:
     # Install node dependencies and run tests
@@ -33,7 +33,7 @@ jobs:
     executor: docker/docker
     environment:
       DOCKER_IMAGE: duowngtora/circleci-react-tiktok
-      DOCKRE_TAG: latest
+      DOCKER_TAG: latest
     steps:
       - setup_remote_docker
       - checkout
