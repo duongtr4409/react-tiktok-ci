@@ -50,6 +50,18 @@ jobs:
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
+  deploy:
+    executor: docker/docker
+    environment:
+      SSH_KEY_FINGERPRINT: SHA256:RSCLnfJu/cTko64EtUBFtvb53hKuWh0PIordaH8hOgE
+      DEPLOYED_USER: duowngtora
+      DEPLOYED_SERVER: 0.tcp.ap.ngrok.io
+      DEPLOYED_PORT: "18058"
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - $SSH_KEY_FINGERPRINT
+      - run: ssh -oStrictHostKeyChecking=no -p $DEPLOYED_PORT $DEPLOYED_USER@$DEPLOYED_SERVER '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
 workflows:
   duowngtora-build-and-test:
     jobs:
@@ -61,3 +73,10 @@ workflows:
                 - master
           requires:
             - test-node
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - build-and-push
