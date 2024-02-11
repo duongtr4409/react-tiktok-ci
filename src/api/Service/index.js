@@ -1,5 +1,5 @@
 import configs from '~/assets/configs';
-import axios from 'axios';
+// import axios from 'axios';
 import REQUEST from '~/utils/request';
 
 //_sort=views&_order=asc

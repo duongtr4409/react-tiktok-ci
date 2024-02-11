@@ -2,82 +2,82 @@
 # Stacks detected: deps:node:.
 version: 2.1
 orbs:
-  node: circleci/node@5
-  docker: circleci/docker@2.5.0
+    node: circleci/node@5
+    docker: circleci/docker@2.5.0
 jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run:
-          name: Print node install help instructions
-          command: |-
-            echo "One cause for node package install failure is if you have private repositories that it can't reach
-            One way to fix this for private npm packages:
-              1. Use the npm CLI's \"login\" command to create a token (usually saved in your user's \"~/.npmrc\" file)
-                For more info, see https://circleci.com/blog/publishing-npm-packages-using-circleci-2-0/#:~:text=set%20the%20%24npm_token%20environment%20variable%20in%20circleci
-              2. Add a NPM_TOKEN to an org context
-                For info on how to use contexts, see https://circleci.com/docs/contexts/
-              3. Add a .circleci/config.yml to your repository or use this config.yml as a starting template
-              4. Configure the jobs to use the context that includes NPM_TOKEN
-              5. Add a step to inject your NPM_TOKEN environment variable into npm before \"install-packages\"
-                For an example, see https://circleci.com/blog/publishing-npm-packages-using-circleci-2-0/#:~:text=the%20deploy%20job%20has%20several%20steps%20that%20run%20to%20authenticate%20with%20and%20publish%20to"
-          when: on_fail
-      - run:
-          name: Run tests
-          command: npm test --passWithNoTests
-  build-and-push:
-    executor: docker/docker
-    environment:
-      DOCKER_IMAGE: duowngtora/circleci-react-tiktok
-      DOCKER_TAG: latest
-    steps:
-      - setup_remote_docker
-      - checkout
-      - docker/check:
-          docker-username: DOCKER_USER
-          docker-password: DOCKER_PASS
-      - docker/build:
-          image: $DOCKER_IMAGE
-          tag: $DOCKER_TAG
-      - docker/push:
-          digest-path: /tmp/digest.txt
-          image: $DOCKER_IMAGE
-          tag: $DOCKER_TAG
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
-  deploy:
-    executor: docker/docker
-    environment:
-      SSH_KEY_FINGERPRINT: SHA256:RSCLnfJu/cTko64EtUBFtvb53hKuWh0PIordaH8hOgE
-      DEPLOYED_USER: duowngtora
-      DEPLOYED_SERVER: 0.tcp.ap.ngrok.io
-      DEPLOYED_PORT: "18058"
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "SHA256:jnEHVLs0KT9V+vDvRExZFBtflsOemNVKqgzphmup2PE"
-      # - run: ssh -oStrictHostKeyChecking=no -p $DEPLOYED_PORT $DEPLOYED_USER@$DEPLOYED_SERVER '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
-      - run: ssh -oStrictHostKeyChecking=no -p 18594 duowngtora@0.tcp.ap.ngrok.io '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
+    test-node:
+        # Install node dependencies and run tests
+        executor: node/default
+        steps:
+            - checkout
+            - node/install-packages:
+                  pkg-manager: npm
+            - run:
+                  name: Print node install help instructions
+                  command: |-
+                      echo "One cause for node package install failure is if you have private repositories that it can't reach
+                      One way to fix this for private npm packages:
+                        1. Use the npm CLI's \"login\" command to create a token (usually saved in your user's \"~/.npmrc\" file)
+                          For more info, see https://circleci.com/blog/publishing-npm-packages-using-circleci-2-0/#:~:text=set%20the%20%24npm_token%20environment%20variable%20in%20circleci
+                        2. Add a NPM_TOKEN to an org context
+                          For info on how to use contexts, see https://circleci.com/docs/contexts/
+                        3. Add a .circleci/config.yml to your repository or use this config.yml as a starting template
+                        4. Configure the jobs to use the context that includes NPM_TOKEN
+                        5. Add a step to inject your NPM_TOKEN environment variable into npm before \"install-packages\"
+                          For an example, see https://circleci.com/blog/publishing-npm-packages-using-circleci-2-0/#:~:text=the%20deploy%20job%20has%20several%20steps%20that%20run%20to%20authenticate%20with%20and%20publish%20to"
+                  when: on_fail
+            - run:
+                  name: Run tests
+                  command: npm test --passWithNoTests
+    build-and-push:
+        executor: docker/docker
+        environment:
+            DOCKER_IMAGE: duowngtora/circleci-react-tiktok
+            DOCKER_TAG: latest
+        steps:
+            - setup_remote_docker
+            - checkout
+            - docker/check:
+                  docker-username: DOCKER_USER
+                  docker-password: DOCKER_PASS
+            - docker/build:
+                  image: $DOCKER_IMAGE
+                  tag: $DOCKER_TAG
+            - docker/push:
+                  digest-path: /tmp/digest.txt
+                  image: $DOCKER_IMAGE
+                  tag: $DOCKER_TAG
+            - run:
+                  command: |
+                      echo "Digest is: $(</tmp/digest.txt)"
+    deploy:
+        executor: docker/docker
+        environment:
+            SSH_KEY_FINGERPRINT: SHA256:RSCLnfJu/cTko64EtUBFtvb53hKuWh0PIordaH8hOgE
+            DEPLOYED_USER: duowngtora
+            DEPLOYED_SERVER: 0.tcp.ap.ngrok.io
+            DEPLOYED_PORT: '10089'
+        steps:
+            - add_ssh_keys:
+                  fingerprints:
+                      - 'SHA256:jnEHVLs0KT9V+vDvRExZFBtflsOemNVKqgzphmup2PE'
+            # - run: ssh -oStrictHostKeyChecking=no -p $DEPLOYED_PORT $DEPLOYED_USER@$DEPLOYED_SERVER '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
+            - run: ssh -oStrictHostKeyChecking=no -p 18594 duowngtora@0.tcp.ap.ngrok.io '/home/duowngtora/DuowngTora/CircleCI/react-tiktok-ci/Deploy/deploy.sh'
 workflows:
-  duowngtora-build-and-test:
-    jobs:
-      - test-node
-      - build-and-push:
-          filters:
-            branches:
-              only:
-                - master
-          requires:
+    duowngtora-build-and-test:
+        jobs:
             - test-node
-      - deploy:
-          filters:
-            branches:
-              only:
-                - master
-          requires:
-            - build-and-push
+            - build-and-push:
+                  filters:
+                      branches:
+                          only:
+                              - master
+                  requires:
+                      - test-node
+            - deploy:
+                  filters:
+                      branches:
+                          only:
+                              - master
+                  requires:
+                      - build-and-push

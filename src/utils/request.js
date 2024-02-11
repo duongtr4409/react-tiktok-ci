@@ -1,5 +1,5 @@
-import axios from 'axios';
 import configs from '~/assets/configs';
+import axios from 'axios';
 
 const REQUEST = axios.create({
     baseURL: `${configs.API_URL}`,
